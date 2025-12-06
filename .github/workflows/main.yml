@@ -1,0 +1,38 @@
+name: Accounting AI Agent
+
+on:
+  workflow_dispatch:
+    inputs:
+      problem:
+        description: "Masukkan perintah soal akuntansi"
+        required: true
+        type: string
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run AI Agent
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: python agent.py "${{ inputs.problem }}"
+
+    - name: Commit output
+      run: |
+        git config user.name "github-actions"
+        git config user.email "actions@github.com"
+        git add output.md
+        git commit -m "Generated journal"
+        git push
