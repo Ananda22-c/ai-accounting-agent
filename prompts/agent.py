@@ -5,7 +5,6 @@ import json
 def load_prompt():
     with open("prompts/accounting_prompt.txt", "r") as f:
         return f.read()
-
 def generate_journal(problem):
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -17,7 +16,6 @@ def generate_journal(problem):
             {"role": "system", "content": prompt},
         ]
     )
-
     return response.choices[0].message["content"]
 
 if _name_ == "_main_":
